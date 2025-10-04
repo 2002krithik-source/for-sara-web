@@ -23,6 +23,15 @@
                 <label for="confirm-password">Confirm Password</label>
                 <input type="password" id="confirm-password" placeholder="Confirm password" required>
             </div>
+            <div class="form-control">
+                <label for="role">Role</label>
+                <select id="role" required>
+                    <option value="" disabled selected>Select your role</option>
+                    <option value="admin">Admin</option>
+                    <option value="participant">Participant</option>
+                    <option value="evaluator">Evaluator</option>
+                </select>
+            </div>
             <button type="submit" class="btn">Register</button>
             <p>Already have an account? <a href="login.html">Login</a></p>
         </form>

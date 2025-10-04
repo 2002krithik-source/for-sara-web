@@ -7,9 +7,10 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             const username = document.getElementById('username').value.trim();
             const password = document.getElementById('password').value.trim();
+            const role = document.getElementById('role').value;
 
-            if (username === '' || password === '') {
-                alert('Please fill in all fields.');
+            if (username === '' || password === '' || role === '') {
+                alert('Please fill in all fields and select a role.');
                 return;
             }
             // In a real application, you would send this to a server for validation.
@@ -25,9 +26,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const username = document.getElementById('username').value.trim();
             const password = document.getElementById('password').value.trim();
             const confirmPassword = document.getElementById('confirm-password').value.trim();
+            const role = document.getElementById('role').value;
 
-            if (username === '' || password === '' || confirmPassword === '') {
-                alert('Please fill in all fields.');
+            if (username === '' || password === '' || confirmPassword === '' || role === '') {
+                alert('Please fill in all fields and select a role.');
                 return;
             }
 
