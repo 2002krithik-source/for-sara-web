@@ -1,0 +1,157 @@
+:root {
+    --primary-color: #007bff;
+    --primary-color-hover: #0056b3;
+    --secondary-color: #6c757d;
+    --background-color: #f8f9fa;
+    --text-color: #333;
+    --white: #fff;
+    --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: auto;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+header {
+    background: var(--white);
+    padding: 1rem 0;
+    text-align: center;
+    box-shadow: var(--box-shadow);
+}
+
+header img {
+    width: 100%;
+    max-width: 800px;
+}
+
+main {
+    text-align: center;
+    padding: 2rem 0;
+}
+
+.buttons {
+    margin-top: 2rem;
+}
+
+.btn {
+    display: inline-block;
+    background: var(--primary-color);
+    color: var(--white);
+    padding: 0.8rem 1.5rem;
+    text-decoration: none;
+    border-radius: 5px;
+    margin: 0.5rem;
+    transition: background-color 0.3s, transform 0.2s;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.btn:hover {
+    background: var(--primary-color-hover);
+    transform: translateY(-2px);
+}
+
+.form {
+    background: var(--white);
+    padding: 2.5rem;
+    border-radius: 10px;
+    box-shadow: var(--box-shadow);
+    margin-top: 2rem;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: left;
+}
+
+.form h2 {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: var(--primary-color);
+}
+
+.form-control {
+    margin-bottom: 1.5rem;
+}
+
+.form-control label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.form-control input {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
+.form p {
+    text-align: center;
+    margin-top: 1.5rem;
+}
+
+.form a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+.form a:hover {
+    text-decoration: underline;
+}
+
+#dashboard h1 {
+    color: var(--primary-color);
+}
+
+@media (max-width: 768px) {
+    .container {
+        width: 95%;
+    }
+
+    .buttons {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .btn {
+        width: 80%;
+        margin-bottom: 1rem;
+    }
+
+    .form {
+        padding: 2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .btn {
+        width: 100%;
+    }
+
+    .form {
+        padding: 1.5rem;
+    }
+}
