@@ -5,14 +5,14 @@ export default function Home() {
   return (
     <div id="index-page">
       <header>
-        <img src="https://placehold.co/1200x200?text=Saranathan+College+of+Engineering" alt="College Banner" />
+        <img src="https://placehold.co/1200x300?text=Saranathan+College+of+Engineering+%7C+Excellence+in+Education" alt="College Banner" />
       </header>
       <main>
         <h1>Welcome to the College Portal</h1>
-        <p>Your gateway to all college resources and information.</p>
+        <p>Your comprehensive gateway to academic excellence, resources, and campus life. Join our community of learners and innovators.</p>
         <div className="buttons">
-          <Link to="/login" className="btn">Login</Link>
-          <Link to="/register" className="btn">Register</Link>
+          <Link to="/login" className="btn">Sign In</Link>
+          <Link to="/register" className="btn btn-secondary">Get Started</Link>
         </div>
       </main>
     </div>

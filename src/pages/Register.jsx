@@ -5,13 +5,12 @@ export default function Register() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
-  const [role, setRole] = useState('')
   const navigate = useNavigate()
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    if (!username || !password || !confirmPassword || !role) {
-      alert('Please fill in all fields and select a role.')
+    if (!username || !password || !confirmPassword) {
+      alert('Please fill in all fields.')
       return
     }
     if (password !== confirmPassword) {
@@ -27,41 +26,51 @@ export default function Register() {
       <div className="auth-panel">
         <div className="auth-form-wrapper">
           <div className="form-header">
-            <h2>Create Your Account</h2>
-            <p>Join the college portal today.</p>
+            <h2>Join Our Community</h2>
+            <p>Create your account and become part of our academic excellence journey.</p>
           </div>
           <form className="form" onSubmit={handleSubmit}>
             <div className="form-control">
               <label>Username</label>
-              <input value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Choose a username" required />
+              <input 
+                value={username} 
+                onChange={(e) => setUsername(e.target.value)} 
+                placeholder="Choose a unique username" 
+                required 
+              />
             </div>
             <div className="form-control">
               <label>Password</label>
-              <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Create a password" required />
+              <input 
+                type="password" 
+                value={password} 
+                onChange={(e) => setPassword(e.target.value)} 
+                placeholder="Create a strong password" 
+                required 
+              />
             </div>
             <div className="form-control">
               <label>Confirm Password</label>
-              <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} placeholder="Confirm your password" required />
+              <input 
+                type="password" 
+                value={confirmPassword} 
+                onChange={(e) => setConfirmPassword(e.target.value)} 
+                placeholder="Confirm your password" 
+                required 
+              />
             </div>
-            <div className="form-control">
-              <label>Role</label>
-              <select value={role} onChange={(e) => setRole(e.target.value)} required>
-                <option value="" disabled>Select your role</option>
-                <option value="admin">Admin</option>
-                <option value="participant">Participant</option>
-                <option value="evaluator">Evaluator</option>
-              </select>
-            </div>
-            <button className="btn" type="submit">Create Account</button>
-            <p className="form-footer">Already have an account? <Link to="/login">Log In</Link></p>
+            <button className="btn" type="submit">Create My Account</button>
+            <p className="form-footer">
+              Already part of our community? <Link to="/login">Sign In</Link>
+            </p>
           </form>
         </div>
       </div>
       <div className="auth-showcase">
         <div className="showcase-content">
           <h3>Saranathan College of Engineering</h3>
-          <p>"Winners Begin with Saranathan"</p>
-          <img src="https://placehold.co/400x300?text=College+Campus" alt="College Campus" />
+          <p>"Innovation • Excellence • Future Leaders"</p>
+          <img src="https://placehold.co/500x350?text=Join+Our+Community+%7C+10000%2B+Students" alt="College Community" />
         </div>
       </div>
     </div>

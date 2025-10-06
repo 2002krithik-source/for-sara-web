@@ -23,36 +23,49 @@ export default function Login() {
         <div className="auth-form-wrapper">
           <div className="form-header">
             <h2>Welcome Back!</h2>
-            <p>Login to access your college portal.</p>
+            <p>Sign in to access your personalized college portal experience.</p>
           </div>
           <form className="form" onSubmit={handleSubmit}>
             <div className="form-control">
-              <label>Username</label>
-              <input value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Enter your username" required />
+              <label>Username or Email</label>
+              <input 
+                value={username} 
+                onChange={(e) => setUsername(e.target.value)} 
+                placeholder="Enter your username or email" 
+                required 
+              />
             </div>
             <div className="form-control">
               <label>Password</label>
-              <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Enter your password" required />
+              <input 
+                type="password" 
+                value={password} 
+                onChange={(e) => setPassword(e.target.value)} 
+                placeholder="Enter your password" 
+                required 
+              />
             </div>
             <div className="form-control">
               <label>Role</label>
               <select value={role} onChange={(e) => setRole(e.target.value)} required>
                 <option value="" disabled>Select your role</option>
-                <option value="admin">Admin</option>
-                <option value="participant">Participant</option>
+                <option value="admin">Administrator</option>
                 <option value="evaluator">Evaluator</option>
+                <option value="participant">Participant</option>
               </select>
             </div>
-            <button className="btn" type="submit">Login</button>
-            <p className="form-footer">Don't have an account? <Link to="/register">Sign Up</Link></p>
+            <button className="btn" type="submit">Sign In to Portal</button>
+            <p className="form-footer">
+              New to our portal? <Link to="/register">Create Account</Link>
+            </p>
           </form>
         </div>
       </div>
       <div className="auth-showcase">
         <div className="showcase-content">
           <h3>Saranathan College of Engineering</h3>
-          <p>"Winners Begin with Saranathan"</p>
-          <img src="https://placehold.co/400x300?text=College+Campus" alt="College Campus" />
+          <p>"Excellence in Engineering Education & Innovation"</p>
+          <img src="https://placehold.co/500x350?text=Modern+Campus+%7C+State-of-the-Art+Facilities" alt="College Campus" />
         </div>
       </div>
     </div>
