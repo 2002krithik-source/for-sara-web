@@ -86,6 +86,7 @@ html {
 /* Utility Classes */
 .glass-effect {
     background: rgba(255, 255, 255, 0.95);
+    -webkit-backdrop-filter: blur(20px);
     backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.2);
 }
@@ -104,6 +105,7 @@ html {
     align-items: center; 
     padding: 3rem 2rem; 
     background: rgba(255, 255, 255, 0.95);
+    -webkit-backdrop-filter: blur(20px);
     backdrop-filter: blur(20px);
     position: relative;
 }
@@ -168,6 +170,7 @@ html {
     margin-bottom: 1.5rem;
     background: linear-gradient(45deg, #fff, #f0f8ff);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
     text-shadow: 0 4px 8px rgba(0,0,0,0.3);
 }
@@ -385,8 +388,10 @@ html {
 }
 
 #index-page header img { 
-    max-width: 900px; 
-    width: 90%; 
+    max-width: 1200px; 
+    width: 95%; 
+    height: auto;
+    object-fit: contain;
     margin-bottom: 3rem; 
     border-radius: var(--border-radius); 
     box-shadow: var(--box-shadow-lg);
@@ -414,8 +419,11 @@ html {
     font-size: 1.3rem;
     color: var(--text-light);
     margin-bottom: 3rem;
-    max-width: 600px;
+    max-width: 700px;
     font-weight: 400;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 #index-page .buttons { 
@@ -467,6 +475,7 @@ html {
     position: relative;
     z-index: 1;
     background: rgba(255, 255, 255, 0.95);
+    -webkit-backdrop-filter: blur(20px);
     backdrop-filter: blur(20px);
     padding: 4rem;
     border-radius: var(--border-radius);
