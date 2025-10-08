@@ -1,21 +1,39 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import * as auth from '../api/auth'
 
 export default function Login() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [role, setRole] = useState('')
   const [showPassword, setShowPassword] = useState(false)
+  const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     if (!username || !password || !role) {
       alert('Please fill in all fields and select a role.')
       return
     }
-    alert('Login successful!')
-    navigate('/dashboard')
+    setLoading(true)
+    try {
+      const res = await auth.login({ username, password, role })
+      // Expecting { token, user } or similar from backend
+      if (res && res.token) {
+        localStorage.setItem('token', res.token)
+      }
+      if (res && res.user) {
+        localStorage.setItem('user', JSON.stringify(res.user))
+      }
+      navigate('/dashboard')
+    } catch (err) {
+      console.error('Login error', err)
+      const msg = err && err.message ? err.message : 'Login failed'
+      alert(msg)
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -75,7 +93,7 @@ export default function Login() {
                 <option value="participant">Participant</option>
               </select>
             </div>
-            <button className="btn" type="submit">Sign In to Portal</button>
+            <button className="btn" type="submit" disabled={loading}>{loading ? 'Signing in…' : 'Sign In to Portal'}</button>
             <p className="form-footer">
               New to our portal? <Link to="/register">Create Account</Link>
             </p>

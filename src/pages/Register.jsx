@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import * as auth from '../api/auth'
 
 export default function Register() {
   const [username, setUsername] = useState('')
@@ -7,9 +8,10 @@ export default function Register() {
   const [confirmPassword, setConfirmPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+  const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     if (!username || !password || !confirmPassword) {
       alert('Please fill in all fields.')
@@ -19,8 +21,20 @@ export default function Register() {
       alert('Passwords do not match.')
       return
     }
-    alert('Registration successful! Please login.')
-    navigate('/login')
+    setLoading(true)
+    try {
+      const res = await auth.register({ username, password })
+      // Optionally show a message from server
+      const message = (res && res.message) || 'Registration successful! Please login.'
+      alert(message)
+      navigate('/login')
+    } catch (err) {
+      console.error('Register error', err)
+      const msg = err && err.message ? err.message : 'Registration failed'
+      alert(msg)
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -101,7 +115,7 @@ export default function Register() {
                 </button>
               </div>
             </div>
-            <button className="btn" type="submit">Create My Account</button>
+            <button className="btn" type="submit" disabled={loading}>{loading ? 'Creating…' : 'Create My Account'}</button>
             <p className="form-footer">
               Already part of our community? <Link to="/login">Sign In</Link>
             </p>
