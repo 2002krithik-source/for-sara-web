@@ -471,17 +471,10 @@ html {
     pointer-events: none;
 }
 
-#dashboard .dashboard-content {
-    position: relative;
-    z-index: 1;
-    background: rgba(255, 255, 255, 0.95);
-    -webkit-backdrop-filter: blur(20px);
-    backdrop-filter: blur(20px);
-    padding: 4rem;
-    border-radius: var(--border-radius);
-    box-shadow: var(--box-shadow-lg);
-    max-width: 800px;
-    width: 100%;
+.dashboard-content {
+    padding: 2rem;
+    background: var(--panel-background-color);
+    min-height: calc(100vh - 60px);
 }
 
 #dashboard h1 { 
@@ -669,4 +662,303 @@ html {
     #dashboard h1 {
         font-size: 2.5rem;
     }
+}
+
+/* Top Header Styles */
+.top-header {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    z-index: 10;
+}
+
+.top-header img {
+    width: 100%;
+    height: auto;
+    display: block;
+    margin: 0;
+    padding: 0;
+    object-fit: contain;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+/* Dashboard Layout Styles */
+#dashboard {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background: var(--background-color);
+}
+
+/* Dashboard Header */
+.dashboard-header {
+    background: var(--panel-background-color);
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    box-shadow: var(--box-shadow);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    z-index: 1000;
+}
+
+.dashboard-header h2 {
+    margin: 0;
+    color: var(--primary-color);
+    font-weight: 600;
+    margin-left: 1rem;
+}
+
+.header-actions {
+    margin-left: auto;
+    color: var(--text-light);
+}
+
+/* Sidebar Toggle Button */
+.sidebar-toggle {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 30px;
+    height: 30px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+.sidebar-toggle span {
+    width: 100%;
+    height: 3px;
+    background: var(--primary-color);
+    border-radius: 2px;
+    transition: var(--transition);
+}
+
+.sidebar-toggle:hover span {
+    background: var(--primary-color-hover);
+}
+
+/* Sidebar */
+.sidebar {
+    position: fixed;
+    top: 60px;
+    left: -280px;
+    width: 280px;
+    height: calc(100vh - 60px);
+    background: var(--panel-background-color);
+    box-shadow: var(--box-shadow-lg);
+    transition: left 0.3s ease;
+    z-index: 999;
+    overflow-y: auto;
+}
+
+.sidebar.open {
+    left: 0;
+}
+
+.sidebar-header {
+    padding: 1.5rem;
+    border-bottom: 2px solid var(--light-gray);
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-color-hover));
+    color: white;
+}
+
+.sidebar-header h3 {
+    margin: 0;
+    color: white;
+    font-weight: 600;
+    font-size: 1.1rem;
+    letter-spacing: 0.5px;
+}
+
+.sidebar-nav ul {
+    list-style: none;
+    padding: 1rem 0;
+    margin: 0;
+}
+
+.sidebar-nav li {
+    margin: 0.25rem 0;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    padding: 0.875rem 1.5rem;
+    color: var(--text-color);
+    text-decoration: none;
+    background: none;
+    border: none;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 500;
+    border-radius: 0 25px 25px 0;
+    margin-right: 1rem;
+    position: relative;
+    transition: all 0.2s ease;
+}
+
+.nav-item:hover {
+    background: linear-gradient(90deg, var(--primary-color), var(--primary-color-hover));
+    color: white;
+    transform: translateX(5px);
+    box-shadow: 0 2px 10px rgba(102, 126, 234, 0.3);
+}
+
+.nav-item:active {
+    transform: translateX(3px);
+}
+
+/* Add subtle icons using CSS pseudo-elements */
+.nav-item:before {
+    content: '';
+    width: 4px;
+    height: 4px;
+    background: currentColor;
+    border-radius: 50%;
+    margin-right: 1rem;
+    opacity: 0.6;
+    transition: all 0.2s ease;
+}
+
+.nav-item:hover:before {
+    opacity: 1;
+    transform: scale(1.5);
+}
+
+/* Sidebar Overlay for mobile */
+.sidebar-overlay {
+    position: fixed;
+    top: 60px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 998;
+}
+
+/* Main Content Area */
+.dashboard-main {
+    margin-top: 60px;
+    margin-left: 0;
+    flex: 1;
+    padding: 0;
+    transition: margin-left 0.3s ease;
+}
+
+/* Desktop Sidebar Always Visible */
+@media (min-width: 1024px) {
+    .sidebar {
+        left: 0;
+        position: fixed;
+    }
+    
+    .dashboard-main {
+        margin-left: 280px;
+    }
+    
+    .sidebar-toggle {
+        display: none;
+    }
+    
+    .sidebar-overlay {
+        display: none;
+    }
+}
+
+/* Upload Modal Styles */
+.upload-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.upload-modal {
+    background: var(--panel-background-color);
+    border-radius: var(--border-radius);
+    width: 90%;
+    max-width: 500px;
+    box-shadow: var(--box-shadow-lg);
+    overflow: hidden;
+}
+
+.modal-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--primary-gradient);
+    color: white;
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-weight: 600;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: var(--transition);
+}
+
+.close-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.modal-body {
+    padding: 2rem;
+    text-align: center;
+}
+
+.file-input {
+    display: none;
+}
+
+.file-upload-btn {
+    display: inline-block;
+    padding: 1rem 2rem;
+    background: var(--primary-gradient);
+    color: white;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-weight: 500;
+    transition: var(--transition);
+    margin-bottom: 1rem;
+}
+
+.file-upload-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--box-shadow);
+}
+
+.modal-body p {
+    margin: 1rem 0 0 0;
+    color: var(--text-light);
 }
