@@ -1,9 +1,13 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
 
 export default function Dashboard() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [showUploadModal, setShowUploadModal] = useState(false)
+  
+  const { user, logout } = useAuth()
+  const navigate = useNavigate()
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen)
@@ -18,28 +22,67 @@ export default function Dashboard() {
     setShowUploadModal(false)
   }
 
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    contactNo: '',
+    department: '',
+    collegeName: '',
+    paperTitle: '',
+    paperAbstract: '',
+    paperFile: null
+  })
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }))
+  }
+
   const handleFileUpload = (event) => {
     const file = event.target.files[0]
-    if (file) {
-      console.log('File selected:', file.name)
-      // Handle file upload logic here
-      alert(`File "${file.name}" selected for upload!`)
-      closeUploadModal()
+    if (file && file.type === 'application/pdf') {
+      setFormData(prev => ({
+        ...prev,
+        paperFile: file
+      }))
+    } else {
+      alert('Please select a PDF file only')
     }
+  }
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault()
+    console.log('Form submitted:', formData)
+    alert('Paper submission successful!')
+    // Reset form
+    setFormData({
+      name: '',
+      email: '',
+      contactNo: '',
+      department: '',
+      collegeName: '',
+      paperTitle: '',
+      paperAbstract: '',
+      paperFile: null
+    })
+    closeUploadModal()
   }
 
   return (
     <div id="dashboard">
       {/* Top Header */}
       <header className="dashboard-header">
-        <button className="sidebar-toggle" onClick={toggleMenu}>
+        <button className={`sidebar-toggle ${isMenuOpen ? 'active' : ''}`} onClick={toggleMenu}>
           <span></span>
           <span></span>
           <span></span>
         </button>
         <h2>Dashboard</h2>
         <div className="header-actions">
-          <span>Welcome, Student</span>
+          <span>Welcome, {user?.name || user?.username}</span>
         </div>
       </header>
 
@@ -61,9 +104,15 @@ export default function Dashboard() {
               </button>
             </li>
             <li>
-              <Link to="/login" className="nav-item">
+              <button 
+                onClick={() => {
+                  logout()
+                  navigate('/login')
+                }} 
+                className="nav-item"
+              >
                 Logout
-              </Link>
+              </button>
             </li>
           </ul>
         </nav>
@@ -72,25 +121,126 @@ export default function Dashboard() {
       {/* Overlay for mobile */}
       {isMenuOpen && <div className="sidebar-overlay" onClick={toggleMenu}></div>}
 
-      {/* Upload Modal */}
+      {/* Upload Form Modal */}
       {showUploadModal && (
         <div className="upload-modal-overlay" onClick={closeUploadModal}>
           <div className="upload-modal" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
-              <h3>Upload File</h3>
+              <h3>Submit Paper</h3>
               <button className="close-btn" onClick={closeUploadModal}>&times;</button>
             </div>
             <div className="modal-body">
-              <input 
-                type="file" 
-                id="file-upload" 
-                onChange={handleFileUpload}
-                className="file-input"
-              />
-              <label htmlFor="file-upload" className="file-upload-btn">
-                Choose File
-              </label>
-              <p>Select a file to upload</p>
+              <form onSubmit={handleFormSubmit} className="upload-form">
+                <div className="form-row">
+                  <div className="form-group">
+                    <label htmlFor="name">Name *</label>
+                    <input
+                      type="text"
+                      id="name"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleInputChange}
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="email">Email *</label>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="form-row">
+                  <div className="form-group">
+                    <label htmlFor="contactNo">Contact Number *</label>
+                    <input
+                      type="tel"
+                      id="contactNo"
+                      name="contactNo"
+                      value={formData.contactNo}
+                      onChange={handleInputChange}
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="department">Department *</label>
+                    <input
+                      type="text"
+                      id="department"
+                      name="department"
+                      value={formData.department}
+                      onChange={handleInputChange}
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="collegeName">College Name *</label>
+                  <input
+                    type="text"
+                    id="collegeName"
+                    name="collegeName"
+                    value={formData.collegeName}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="paperTitle">Paper Title *</label>
+                  <input
+                    type="text"
+                    id="paperTitle"
+                    name="paperTitle"
+                    value={formData.paperTitle}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="paperAbstract">Paper Abstract *</label>
+                  <textarea
+                    id="paperAbstract"
+                    name="paperAbstract"
+                    value={formData.paperAbstract}
+                    onChange={handleInputChange}
+                    rows="4"
+                    required
+                  ></textarea>
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="paperFile">Paper (PDF File) *</label>
+                  <input
+                    type="file"
+                    id="paperFile"
+                    accept=".pdf"
+                    onChange={handleFileUpload}
+                    className="file-input"
+                    required
+                  />
+                  <label htmlFor="paperFile" className="file-upload-btn">
+                    {formData.paperFile ? formData.paperFile.name : 'Choose PDF File'}
+                  </label>
+                </div>
+
+                <div className="form-actions">
+                  <button type="button" onClick={closeUploadModal} className="btn btn-secondary">
+                    Cancel
+                  </button>
+                  <button type="submit" className="btn btn-primary">
+                    Submit Paper
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         </div>
