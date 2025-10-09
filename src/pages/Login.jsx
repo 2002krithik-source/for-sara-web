@@ -1,21 +1,50 @@
 import React, { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
 
 export default function Login() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [role, setRole] = useState('')
   const [showPassword, setShowPassword] = useState(false)
+  const [error, setError] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+  
   const navigate = useNavigate()
+  const location = useLocation()
+  const { login } = useAuth()
 
-  const handleSubmit = (e) => {
+  const from = location.state?.from?.pathname || '/dashboard'
+
+  const handleSubmit = async (e) => {
     e.preventDefault()
+    setError('')
+    
     if (!username || !password || !role) {
-      alert('Please fill in all fields and select a role.')
+      setError('Please fill in all fields and select a role.')
       return
     }
-    alert('Login successful!')
-    navigate('/dashboard')
+
+    setIsLoading(true)
+
+    try {
+      const result = login({ username, password, role })
+      
+      if (result.success) {
+        // Only allow participants to access dashboard
+        if (role === 'participant') {
+          navigate(from, { replace: true })
+        } else {
+          setError(`Dashboard access is restricted to participants only. Your role: ${role}`)
+        }
+      } else {
+        setError(result.error)
+      }
+    } catch (err) {
+      setError('Login failed. Please try again.')
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -25,6 +54,7 @@ export default function Login() {
           <div className="form-header">
             <h2>Welcome Back!</h2>
             <p>Sign in to access your personalized college portal experience.</p>
+            {error && <div className="error-message">{error}</div>}
           </div>
           <form className="form" onSubmit={handleSubmit}>
             <div className="form-control">
@@ -75,7 +105,9 @@ export default function Login() {
                 <option value="participant">Participant</option>
               </select>
             </div>
-            <button className="btn" type="submit">Sign In to Portal</button>
+            <button className="btn" type="submit" disabled={isLoading}>
+              {isLoading ? 'Signing In...' : 'Sign In to Portal'}
+            </button>
             <p className="form-footer">
               New to our portal? <Link to="/register">Create Account</Link>
             </p>

@@ -1,26 +1,74 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
 
 export default function Register() {
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
+  const [formData, setFormData] = useState({
+    username: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+    name: ''
+  })
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+  const [error, setError] = useState('')
+  const [success, setSuccess] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+  
   const navigate = useNavigate()
+  const { register } = useAuth()
 
-  const handleSubmit = (e) => {
+  const handleInputChange = (e) => {
+    setFormData(prev => ({
+      ...prev,
+      [e.target.name]: e.target.value
+    }))
+  }
+
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    if (!username || !password || !confirmPassword) {
-      alert('Please fill in all fields.')
+    setError('')
+    setSuccess('')
+    
+    if (!formData.username || !formData.email || !formData.password || !formData.confirmPassword || !formData.name) {
+      setError('Please fill in all fields.')
       return
     }
-    if (password !== confirmPassword) {
-      alert('Passwords do not match.')
+    
+    if (formData.password !== formData.confirmPassword) {
+      setError('Passwords do not match.')
       return
     }
-    alert('Registration successful! Please login.')
-    navigate('/login')
+
+    if (formData.password.length < 6) {
+      setError('Password must be at least 6 characters long.')
+      return
+    }
+
+    setIsLoading(true)
+
+    try {
+      const result = register({
+        username: formData.username,
+        email: formData.email,
+        password: formData.password,
+        name: formData.name
+      })
+      
+      if (result.success) {
+        setSuccess('Registration successful! You can now login as a participant.')
+        setTimeout(() => {
+          navigate('/login')
+        }, 2000)
+      } else {
+        setError(result.error)
+      }
+    } catch (err) {
+      setError('Registration failed. Please try again.')
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -30,14 +78,38 @@ export default function Register() {
           <div className="form-header">
             <h2>Join Our Community</h2>
             <p>Create your account and become part of our academic excellence journey.</p>
+            {error && <div className="error-message">{error}</div>}
+            {success && <div className="success-message">{success}</div>}
           </div>
           <form className="form" onSubmit={handleSubmit}>
             <div className="form-control">
+              <label>Full Name</label>
+              <input 
+                name="name"
+                value={formData.name} 
+                onChange={handleInputChange} 
+                placeholder="Enter your full name" 
+                required 
+              />
+            </div>
+            <div className="form-control">
               <label>Username</label>
               <input 
-                value={username} 
-                onChange={(e) => setUsername(e.target.value)} 
+                name="username"
+                value={formData.username} 
+                onChange={handleInputChange} 
                 placeholder="Choose a unique username" 
+                required 
+              />
+            </div>
+            <div className="form-control">
+              <label>Email</label>
+              <input 
+                name="email"
+                type="email"
+                value={formData.email} 
+                onChange={handleInputChange} 
+                placeholder="Enter your email address" 
                 required 
               />
             </div>
@@ -45,10 +117,11 @@ export default function Register() {
               <label>Password</label>
               <div className="password-input-wrapper">
                 <input 
+                  name="password"
                   type={showPassword ? "text" : "password"} 
-                  value={password} 
-                  onChange={(e) => setPassword(e.target.value)} 
-                  placeholder="Create a strong password" 
+                  value={formData.password} 
+                  onChange={handleInputChange} 
+                  placeholder="Create a strong password (min 6 characters)" 
                   required 
                 />
                 <button 
@@ -75,9 +148,10 @@ export default function Register() {
               <label>Confirm Password</label>
               <div className="password-input-wrapper">
                 <input 
+                  name="confirmPassword"
                   type={showConfirmPassword ? "text" : "password"} 
-                  value={confirmPassword} 
-                  onChange={(e) => setConfirmPassword(e.target.value)} 
+                  value={formData.confirmPassword} 
+                  onChange={handleInputChange} 
                   placeholder="Confirm your password" 
                   required 
                 />
@@ -101,7 +175,9 @@ export default function Register() {
                 </button>
               </div>
             </div>
-            <button className="btn" type="submit">Create My Account</button>
+            <button className="btn" type="submit" disabled={isLoading}>
+              {isLoading ? 'Creating Account...' : 'Create My Account'}
+            </button>
             <p className="form-footer">
               Already part of our community? <Link to="/login">Sign In</Link>
             </p>
