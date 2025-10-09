@@ -4,7 +4,7 @@ import react from '@vitejs/plugin-react'
 // Default backend target for proxying API requests in development.
 // You can override by setting the BACKEND_URL environment variable, e.g.:
 // BACKEND_URL=http://localhost:8080 npm run dev
-const backendTarget = process.env.BACKEND_URL || 'http://localhost:8080'
+const backendTarget = process.env.BACKEND_URL || 'http://98.70.26.80:8090'
 
 export default defineConfig({
   plugins: [react()],
