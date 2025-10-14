@@ -14,7 +14,20 @@ export default function Login() {
   const location = useLocation()
   const { login } = useAuth()
 
-  const from = location.state?.from?.pathname || '/dashboard'
+  const from = location.state?.from?.pathname || getDefaultRoute(role)
+
+  function getDefaultRoute(userRole) {
+    switch(userRole) {
+      case 'participant':
+        return '/dashboard'
+      case 'evaluator':
+        return '/evaluator-dashboard'
+      case 'admin':
+        return '/admin-dashboard' // For future use
+      default:
+        return '/'
+    }
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -31,12 +44,9 @@ export default function Login() {
       const result = login({ username, password, role })
       
       if (result.success) {
-        // Only allow participants to access dashboard
-        if (role === 'participant') {
-          navigate(from, { replace: true })
-        } else {
-          setError(`Dashboard access is restricted to participants only. Your role: ${role}`)
-        }
+        // Redirect based on user role
+        const redirectPath = getDefaultRoute(role)
+        navigate(redirectPath, { replace: true })
       } else {
         setError(result.error)
       }
