@@ -8,6 +8,8 @@ import Register from './pages/Register'
 import Dashboard from './pages/Dashboard'
 import EvaluatorDashboard from './pages/EvaluatorDashboard'
 import EvaluatePapers from './pages/EvaluatePapers'
+import AdminDashboard from './pages/AdminDashboard'
+import AdminPapers from './pages/AdminPapers'
 
 export default function App() {
   return (
@@ -37,6 +39,22 @@ export default function App() {
           element={
             <ProtectedRoute requiredRole="evaluator">
               <EvaluatePapers />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/admin-dashboard" 
+          element={
+            <ProtectedRoute requiredRole="admin">
+              <AdminDashboard />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/admin-papers" 
+          element={
+            <ProtectedRoute requiredRole="admin">
+              <AdminPapers />
             </ProtectedRoute>
           } 
         />

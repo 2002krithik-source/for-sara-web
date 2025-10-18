@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import { samplePapers } from '../data/sampleData'
 
 export default function EvaluatePapers() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -15,45 +16,15 @@ export default function EvaluatePapers() {
   const { user, logout } = useAuth()
   const navigate = useNavigate()
 
-  // Mock submitted papers data
-  const [submittedPapers, setSubmittedPapers] = useState([
-    {
-      id: 1,
-      title: "AI-Driven Smart Traffic Management System",
-      author: "John Doe",
-      email: "john.doe@example.com",
-      department: "Computer Science",
-      college: "Saranathan College of Engineering",
-      abstract: "This paper presents an innovative approach to traffic management using artificial intelligence and machine learning algorithms to optimize traffic flow in urban areas.",
-      submittedDate: "2025-10-10",
-      status: "pending",
-      fileName: "ai_traffic_management.pdf"
-    },
-    {
-      id: 2, 
-      title: "Sustainable Energy Solutions for Rural Communities",
-      author: "Jane Smith",
-      email: "jane.smith@example.com",
-      department: "Electrical Engineering",
-      college: "Anna University",
-      abstract: "An analysis of renewable energy implementation strategies for rural electrification with focus on solar and wind power integration.",
-      submittedDate: "2025-10-11",
-      status: "pending",
-      fileName: "sustainable_energy_rural.pdf"
-    },
-    {
-      id: 3,
-      title: "Machine Learning in Healthcare Diagnostics",
-      author: "Mike Johnson",
-      email: "mike.j@example.com",
-      department: "Biomedical Engineering",
-      college: "IIT Madras",
-      abstract: "Implementation of deep learning models for early disease detection and medical image analysis in healthcare systems.",
-      submittedDate: "2025-10-12",
-      status: "approved",
-      fileName: "ml_healthcare_diagnostics.pdf"
-    }
-  ])
+  // Filter papers assigned to this evaluator
+  const [submittedPapers, setSubmittedPapers] = useState(
+    samplePapers.filter(paper => 
+      paper.assignedEvaluator === user?.username || 
+      (user?.username === 'evaluator1' && [1, 2, 3, 4, 5, 6].includes(paper.id)) ||
+      (user?.username === 'evaluator2' && [7, 8, 9, 10].includes(paper.id)) ||
+      (user?.username === 'evaluator3' && [11, 12].includes(paper.id))
+    )
+  )
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen)
@@ -154,11 +125,6 @@ export default function EvaluatePapers() {
         </div>
         <nav className="sidebar-nav">
           <ul>
-            <li>
-              <Link to="/" className="nav-item">
-                Home
-              </Link>
-            </li>
             <li>
               <Link to="/evaluator-dashboard" className="nav-item">
                 Dashboard

@@ -16,29 +16,100 @@ export const AuthProvider = ({ children }) => {
 
   // Mock database of registered users
   const registeredUsers = [
+    // Participants/Students
     {
       id: 1,
       username: 'participant1',
       email: 'participant1@example.com',
       password: 'password123',
       role: 'participant',
-      name: 'John Doe'
+      name: 'John Doe',
+      department: 'Computer Science',
+      college: 'Saranathan College of Engineering'
     },
     {
       id: 2,
+      username: 'student1',
+      email: 'student1@saranathan.edu',
+      password: 'student123',
+      role: 'participant',
+      name: 'Alice Johnson',
+      department: 'Information Technology',
+      college: 'Saranathan College of Engineering'
+    },
+    {
+      id: 3,
+      username: 'researcher1',
+      email: 'researcher1@mit.edu',
+      password: 'research123',
+      role: 'participant',
+      name: 'Dr. Robert Chen',
+      department: 'Artificial Intelligence',
+      college: 'MIT Chennai'
+    },
+    
+    // Admin
+    {
+      id: 4,
       username: 'admin',
       email: 'admin@saranathan.edu',
       password: 'admin123',
       role: 'admin',
-      name: 'Admin User'
+      name: 'Admin User',
+      department: 'Administration',
+      college: 'Saranathan College of Engineering'
     },
+    
+    // Evaluators
     {
-      id: 3,
+      id: 5,
       username: 'evaluator1',
-      email: 'evaluator1@saranathan.edu',
+      email: 'sarah.wilson@saranathan.edu',
       password: 'eval123',
       role: 'evaluator',
-      name: 'Dr. Smith'
+      name: 'Dr. Sarah Wilson',
+      department: 'Computer Science',
+      expertise: ['AI', 'Machine Learning', 'Healthcare', 'Data Science']
+    },
+    {
+      id: 6,
+      username: 'evaluator2',
+      email: 'kumar.singh@saranathan.edu',
+      password: 'eval123',
+      role: 'evaluator',
+      name: 'Prof. Kumar Singh',
+      department: 'Cybersecurity',
+      expertise: ['Cybersecurity', 'Cloud Computing', 'Networks', 'Blockchain']
+    },
+    {
+      id: 7,
+      username: 'evaluator3',
+      email: 'anita.sharma@saranathan.edu',
+      password: 'eval123',
+      role: 'evaluator',
+      name: 'Dr. Anita Sharma',
+      department: 'Mechanical Engineering',
+      expertise: ['Robotics', 'Manufacturing', 'Automation', 'Industry 4.0']
+    },
+    {
+      id: 8,
+      username: 'evaluator4',
+      email: 'priya.nair@saranathan.edu',
+      password: 'eval123',
+      role: 'evaluator',
+      name: 'Dr. Priya Nair',
+      department: 'Electronics',
+      expertise: ['Telecommunications', '5G', 'Wireless Networks', 'Signal Processing']
+    },
+    {
+      id: 9,
+      username: 'evaluator5',
+      email: 'raj.patel@saranathan.edu',
+      password: 'eval123',
+      role: 'evaluator',
+      name: 'Prof. Raj Patel',
+      department: 'Agricultural Engineering',
+      expertise: ['IoT', 'Agriculture', 'Sensors', 'Smart Farming']
     }
   ]
 
@@ -118,6 +189,14 @@ export const AuthProvider = ({ children }) => {
     return user && user.role === 'participant'
   }
 
+  const canAccessEvaluatorDashboard = () => {
+    return user && user.role === 'evaluator'
+  }
+
+  const canAccessAdminDashboard = () => {
+    return user && user.role === 'admin'
+  }
+
   const value = {
     user,
     isLoading,
@@ -127,6 +206,8 @@ export const AuthProvider = ({ children }) => {
     isAuthenticated,
     hasRole,
     canAccessDashboard,
+    canAccessEvaluatorDashboard,
+    canAccessAdminDashboard,
     registeredUsers // For demo purposes
   }
 
