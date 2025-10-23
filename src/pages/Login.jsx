@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import baImage from '../assets/ba.jpg'
 
 export default function Login() {
   const [username, setUsername] = useState('')
@@ -128,7 +129,7 @@ export default function Login() {
         <div className="showcase-content">
           <h3>Saranathan College of Engineering</h3>
           <p>"Excellence in Engineering Education & Innovation"</p>
-          <img src="https://placehold.co/500x350?text=Modern+Campus+%7C+State-of-the-Art+Facilities" alt="College Campus" />
+          <img src={baImage} alt="College Campus" />
         </div>
       </div>
     </div>

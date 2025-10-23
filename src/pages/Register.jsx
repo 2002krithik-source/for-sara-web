@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import baImage from '../assets/ba.jpg'
 
 export default function Register() {
   const [formData, setFormData] = useState({
@@ -188,7 +189,7 @@ export default function Register() {
         <div className="showcase-content">
           <h3>Saranathan College of Engineering</h3>
           <p>"Innovation • Excellence • Future Leaders"</p>
-          <img src="https://placehold.co/500x350?text=Join+Our+Community+%7C+10000%2B+Students" alt="College Community" />
+          <img src={baImage} alt="College Community" />
         </div>
       </div>
     </div>
