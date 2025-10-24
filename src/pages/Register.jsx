@@ -7,8 +7,7 @@ export default function Register() {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
-    confirmPassword: '',
-    role: 'PARTICIPANT'
+    confirmPassword: ''
   })
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
@@ -52,7 +51,7 @@ export default function Register() {
       const result = await register({
         email: formData.email,
         password: formData.password,
-        role: formData.role
+        role: 'PARTICIPANT' // Default role for all registrations
       })
       
       if (result.success) {
@@ -91,19 +90,6 @@ export default function Register() {
                 placeholder="Enter your email address" 
                 required 
               />
-            </div>
-            <div className="form-control">
-              <label>Role</label>
-              <select 
-                name="role"
-                value={formData.role} 
-                onChange={handleInputChange} 
-                required
-              >
-                <option value="PARTICIPANT">Participant</option>
-                <option value="EVALUATOR">Evaluator</option>
-                <option value="ADMIN">Administrator</option>
-              </select>
             </div>
             <div className="form-control">
               <label>Password</label>

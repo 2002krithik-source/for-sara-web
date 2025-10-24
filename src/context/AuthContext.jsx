@@ -42,6 +42,8 @@ export const AuthProvider = ({ children }) => {
           loginTime: new Date().toISOString()
         }
         
+        console.log('✅ Login successful:', { email: userSession.email, role: userSession.role })
+        
         setUser(userSession)
         localStorage.setItem('user', JSON.stringify(userSession))
         return { success: true, user: userSession }
@@ -85,19 +87,25 @@ export const AuthProvider = ({ children }) => {
   }
 
   const hasRole = (requiredRole) => {
-    return user && user.role === requiredRole
+    return user && user.role?.toLowerCase() === requiredRole?.toLowerCase()
   }
 
   const canAccessDashboard = () => {
-    return user && user.role === 'participant'
+    const hasAccess = user && user.role?.toLowerCase() === 'participant'
+    console.log('🔐 Dashboard access check:', { 
+      userRole: user?.role, 
+      normalized: user?.role?.toLowerCase(), 
+      hasAccess 
+    })
+    return hasAccess
   }
 
   const canAccessEvaluatorDashboard = () => {
-    return user && user.role === 'evaluator'
+    return user && user.role?.toLowerCase() === 'evaluator'
   }
 
   const canAccessAdminDashboard = () => {
-    return user && user.role === 'admin'
+    return user && user.role?.toLowerCase() === 'admin'
   }
 
   const value = {
