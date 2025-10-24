@@ -4,11 +4,10 @@ import { useAuth } from '../context/AuthContext'
 
 export default function Register() {
   const [formData, setFormData] = useState({
-    username: '',
     email: '',
     password: '',
     confirmPassword: '',
-    name: ''
+    role: 'PARTICIPANT'
   })
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
@@ -31,7 +30,7 @@ export default function Register() {
     setError('')
     setSuccess('')
     
-    if (!formData.username || !formData.email || !formData.password || !formData.confirmPassword || !formData.name) {
+    if (!formData.email || !formData.password || !formData.confirmPassword) {
       setError('Please fill in all fields.')
       return
     }
@@ -49,17 +48,16 @@ export default function Register() {
     setIsLoading(true)
 
     try {
-      const result = register({
-        username: formData.username,
+      const result = await register({
         email: formData.email,
         password: formData.password,
-        name: formData.name
+        role: formData.role
       })
       
       if (result.success) {
-        setSuccess('Registration successful! You can now login as a participant.')
+        setSuccess(result.message || 'Registration successful! You can now login.')
         setTimeout(() => {
-          navigate('/login')
+          navigate('/dashboard')
         }, 2000)
       } else {
         setError(result.error)
@@ -83,26 +81,6 @@ export default function Register() {
           </div>
           <form className="form" onSubmit={handleSubmit}>
             <div className="form-control">
-              <label>Full Name</label>
-              <input 
-                name="name"
-                value={formData.name} 
-                onChange={handleInputChange} 
-                placeholder="Enter your full name" 
-                required 
-              />
-            </div>
-            <div className="form-control">
-              <label>Username</label>
-              <input 
-                name="username"
-                value={formData.username} 
-                onChange={handleInputChange} 
-                placeholder="Choose a unique username" 
-                required 
-              />
-            </div>
-            <div className="form-control">
               <label>Email</label>
               <input 
                 name="email"
@@ -112,6 +90,19 @@ export default function Register() {
                 placeholder="Enter your email address" 
                 required 
               />
+            </div>
+            <div className="form-control">
+              <label>Role</label>
+              <select 
+                name="role"
+                value={formData.role} 
+                onChange={handleInputChange} 
+                required
+              >
+                <option value="PARTICIPANT">Participant</option>
+                <option value="EVALUATOR">Evaluator</option>
+                <option value="ADMIN">Administrator</option>
+              </select>
             </div>
             <div className="form-control">
               <label>Password</label>

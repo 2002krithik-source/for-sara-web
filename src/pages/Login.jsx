@@ -14,20 +14,7 @@ export default function Login() {
   const location = useLocation()
   const { login } = useAuth()
 
-  const from = location.state?.from?.pathname || getDefaultRoute(role)
-
-  function getDefaultRoute(userRole) {
-    switch(userRole) {
-      case 'participant':
-        return '/dashboard'
-      case 'evaluator':
-        return '/evaluator-dashboard'
-      case 'admin':
-        return '/admin-dashboard' // For future use
-      default:
-        return '/'
-    }
-  }
+  const from = location.state?.from?.pathname || '/dashboard'
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -41,11 +28,18 @@ export default function Login() {
     setIsLoading(true)
 
     try {
-      const result = login({ username, password, role })
+      const result = await login({ username, password, role })
       
       if (result.success) {
-        // Redirect based on user role
-        const redirectPath = getDefaultRoute(role)
+        // Navigate based on selected role
+        let redirectPath = '/dashboard' // Default for PARTICIPANT
+        
+        if (role === 'EVALUATOR') {
+          redirectPath = '/evaluator-dashboard'
+        } else if (role === 'ADMIN') {
+          redirectPath = '/admin-dashboard'
+        }
+        
         navigate(redirectPath, { replace: true })
       } else {
         setError(result.error)
@@ -110,9 +104,9 @@ export default function Login() {
               <label>Role</label>
               <select value={role} onChange={(e) => setRole(e.target.value)} required>
                 <option value="" disabled>Select your role</option>
-                <option value="admin">Administrator</option>
-                <option value="evaluator">Evaluator</option>
-                <option value="participant">Participant</option>
+                <option value="PARTICIPANT">Participant</option>
+                <option value="EVALUATOR">Evaluator</option>
+                <option value="ADMIN">Administrator</option>
               </select>
             </div>
             <button className="btn" type="submit" disabled={isLoading}>

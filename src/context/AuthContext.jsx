@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react'
+import * as authApi from '../api/auth'
 
 const AuthContext = createContext()
 
@@ -14,105 +15,6 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
 
-  // Mock database of registered users
-  const registeredUsers = [
-    // Participants/Students
-    {
-      id: 1,
-      username: 'participant1',
-      email: 'participant1@example.com',
-      password: 'password123',
-      role: 'participant',
-      name: 'John Doe',
-      department: 'Computer Science',
-      college: 'Saranathan College of Engineering'
-    },
-    {
-      id: 2,
-      username: 'student1',
-      email: 'student1@saranathan.edu',
-      password: 'student123',
-      role: 'participant',
-      name: 'Alice Johnson',
-      department: 'Information Technology',
-      college: 'Saranathan College of Engineering'
-    },
-    {
-      id: 3,
-      username: 'researcher1',
-      email: 'researcher1@mit.edu',
-      password: 'research123',
-      role: 'participant',
-      name: 'Dr. Robert Chen',
-      department: 'Artificial Intelligence',
-      college: 'MIT Chennai'
-    },
-    
-    // Admin
-    {
-      id: 4,
-      username: 'admin',
-      email: 'admin@saranathan.edu',
-      password: 'admin123',
-      role: 'admin',
-      name: 'Admin User',
-      department: 'Administration',
-      college: 'Saranathan College of Engineering'
-    },
-    
-    // Evaluators
-    {
-      id: 5,
-      username: 'evaluator1',
-      email: 'sarah.wilson@saranathan.edu',
-      password: 'eval123',
-      role: 'evaluator',
-      name: 'Dr. Sarah Wilson',
-      department: 'Computer Science',
-      expertise: ['AI', 'Machine Learning', 'Healthcare', 'Data Science']
-    },
-    {
-      id: 6,
-      username: 'evaluator2',
-      email: 'kumar.singh@saranathan.edu',
-      password: 'eval123',
-      role: 'evaluator',
-      name: 'Prof. Kumar Singh',
-      department: 'Cybersecurity',
-      expertise: ['Cybersecurity', 'Cloud Computing', 'Networks', 'Blockchain']
-    },
-    {
-      id: 7,
-      username: 'evaluator3',
-      email: 'anita.sharma@saranathan.edu',
-      password: 'eval123',
-      role: 'evaluator',
-      name: 'Dr. Anita Sharma',
-      department: 'Mechanical Engineering',
-      expertise: ['Robotics', 'Manufacturing', 'Automation', 'Industry 4.0']
-    },
-    {
-      id: 8,
-      username: 'evaluator4',
-      email: 'priya.nair@saranathan.edu',
-      password: 'eval123',
-      role: 'evaluator',
-      name: 'Dr. Priya Nair',
-      department: 'Electronics',
-      expertise: ['Telecommunications', '5G', 'Wireless Networks', 'Signal Processing']
-    },
-    {
-      id: 9,
-      username: 'evaluator5',
-      email: 'raj.patel@saranathan.edu',
-      password: 'eval123',
-      role: 'evaluator',
-      name: 'Prof. Raj Patel',
-      department: 'Agricultural Engineering',
-      expertise: ['IoT', 'Agriculture', 'Sensors', 'Smart Farming']
-    }
-  ]
-
   // Check if user is logged in on app start
   useEffect(() => {
     const savedUser = localStorage.getItem('user')
@@ -122,54 +24,55 @@ export const AuthProvider = ({ children }) => {
     setIsLoading(false)
   }, [])
 
-  const login = (credentials) => {
+  const login = async (credentials) => {
     const { username, password, role } = credentials
     
-    // Find user in registered users
-    const foundUser = registeredUsers.find(user => 
-      (user.username === username || user.email === username) && 
-      user.password === password &&
-      user.role === role
-    )
-
-    if (foundUser) {
-      const userSession = {
-        id: foundUser.id,
-        username: foundUser.username,
-        email: foundUser.email,
-        role: foundUser.role,
-        name: foundUser.name,
-        loginTime: new Date().toISOString()
-      }
+    try {
+      // Call backend API - expects email field
+      const response = await authApi.login({ 
+        email: username, // Backend uses email field
+        password 
+      })
       
-      setUser(userSession)
-      localStorage.setItem('user', JSON.stringify(userSession))
-      return { success: true, user: userSession }
-    } else {
-      return { success: false, error: 'Invalid credentials or role mismatch' }
+      // Backend returns: { message, email, role? }
+      if (response && response.email) {
+        const userSession = {
+          email: response.email,
+          role: role, // Use role selected from frontend
+          loginTime: new Date().toISOString()
+        }
+        
+        setUser(userSession)
+        localStorage.setItem('user', JSON.stringify(userSession))
+        return { success: true, user: userSession }
+      } else {
+        return { success: false, error: response.message || 'Login failed' }
+      }
+    } catch (error) {
+      console.error('Login error:', error)
+      return { success: false, error: error.message || 'Invalid credentials' }
     }
   }
 
-  const register = (userData) => {
-    // Check if user already exists
-    const existingUser = registeredUsers.find(user => 
-      user.username === userData.username || user.email === userData.email
-    )
-
-    if (existingUser) {
-      return { success: false, error: 'User already exists' }
+  const register = async (userData) => {
+    try {
+      // Call backend API - expects { email, password, role }
+      const response = await authApi.register({
+        email: userData.email,
+        password: userData.password,
+        role: userData.role || 'PARTICIPANT' // Default to participant
+      })
+      
+      // Backend returns: { message, success }
+      if (response && response.success) {
+        return { success: true, message: response.message || 'Registration successful! Please login.' }
+      } else {
+        return { success: false, error: response.message || 'Registration failed' }
+      }
+    } catch (error) {
+      console.error('Register error:', error)
+      return { success: false, error: error.message || 'Registration failed' }
     }
-
-    // Add new user to mock database (in real app, this would be an API call)
-    const newUser = {
-      id: registeredUsers.length + 1,
-      ...userData,
-      role: 'participant' // New registrations are always participants
-    }
-    
-    registeredUsers.push(newUser)
-    
-    return { success: true, message: 'Registration successful! Please login.' }
   }
 
   const logout = () => {
@@ -207,8 +110,7 @@ export const AuthProvider = ({ children }) => {
     hasRole,
     canAccessDashboard,
     canAccessEvaluatorDashboard,
-    canAccessAdminDashboard,
-    registeredUsers // For demo purposes
+    canAccessAdminDashboard
   }
 
   return (
